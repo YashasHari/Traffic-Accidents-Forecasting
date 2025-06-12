@@ -44,3 +44,8 @@ plt.xlabel('Date')
 plt.ylabel('Number of accidents')
 plt.grid(True)
 plt.show()
+
+# Build ARIMA model
+ts = filtered_df['Value']
+model = ARIMA(ts, order=(1,1,1))
+model_fit = model.fit()
