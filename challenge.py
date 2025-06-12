@@ -36,3 +36,11 @@ filtered_df['y'] = filtered_df['Value']
 filtered_df = filtered_df.sort_values('ds')
 filtered_df.set_index('ds', inplace=True)
 
+# Plot historical data 
+plt.figure(figsize=(12, 6))
+plt.plot(filtered_df.index, filtered_df['Value'], marker='o')
+plt.title('Historical number of Alkoholunfälle (insgesamt)')
+plt.xlabel('Date')
+plt.ylabel('Number of accidents')
+plt.grid(True)
+plt.show()
