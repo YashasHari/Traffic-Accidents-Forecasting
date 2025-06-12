@@ -63,3 +63,28 @@ def get_arima_forecast(year, month):
         return forecast_series.loc[target_date]
     else:
         return None
+    
+# Flask app
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Flask app is running. Use POST /forecast with JSON {'year': YYYY, 'month': M} to get prediction."
+
+@app.route('/forecast', methods=['POST'])
+def forecast():
+    data = request.get_json()
+    year = data.get('year')
+    month = data.get('month')
+    
+    if year is None or month is None:
+        return jsonify({"error": "Please provide 'year' and 'month' in JSON body"}), 400
+    
+    prediction = get_arima_forecast(year, month)
+    if prediction is None:
+        return jsonify({"error": "Date not in forecast range"}), 400
+    
+    return jsonify({"prediction": round(float(prediction))})
+
+if __name__ == '__main__':
+    app.run(debug=True)
