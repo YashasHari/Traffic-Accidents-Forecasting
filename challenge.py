@@ -49,3 +49,17 @@ plt.show()
 ts = filtered_df['Value']
 model = ARIMA(ts, order=(1,1,1))
 model_fit = model.fit()
+
+# Forecast for next 60 months
+forecast_steps = 60
+forecast_result = model_fit.get_forecast(steps=forecast_steps)
+forecast_index = pd.date_range(start=ts.index[-1] + pd.offsets.MonthBegin(1), periods=forecast_steps, freq='MS')
+forecast_series = pd.Series(forecast_result.predicted_mean.values, index=forecast_index)
+
+# Forecast function
+def get_arima_forecast(year, month):
+    target_date = pd.Timestamp(year=year, month=month, day=1)
+    if target_date in forecast_series.index:
+        return forecast_series.loc[target_date]
+    else:
+        return None
